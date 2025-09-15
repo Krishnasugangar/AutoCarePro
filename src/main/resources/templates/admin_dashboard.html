@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Admin Dashboard - AutoCare Pro</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <style>
+        body { background: #222; color: #fff; padding: 30px; font-family: Arial, sans-serif; padding-top: 70px; }
+        .btn-toggle-group { margin-bottom: 20px; }
+        .table thead th { color: #fff; }
+        .btn-primary, .btn-secondary { cursor: pointer; }
+        .footer-fixed {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            z-index: 999;
+            background-color: #222;
+        }
+
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-dark bg-dark fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/}">AutoCare Pro</a>
+        <form th:action="@{/logout}" method="post" class="d-flex">
+            <button class="btn btn-outline-light logout-btn" type="submit">Logout</button>
+        </form>
+    </div>
+</nav>
+
+
+<div class="container">
+
+    <!-- Toggle buttons -->
+    <div class="btn-toggle-group btn-group" role="group" aria-label="Toggle service status">
+        <button id="btnPending" type="button" class="btn btn-primary" onclick="showTable('pending')">Pending Services</button>
+        <button id="btnCompleted" type="button" class="btn btn-secondary" onclick="showTable('completed')">Completed Services</button>
+    </div>
+
+    <!-- Pending services table -->
+    <table id="pendingTable" class="table table-striped table-dark">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Customer</th>
+            <th>Car</th>
+            <th>Service</th>
+            <th>Requested On</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="req : ${pendingRequests}">
+            <td th:text="${req.id}">1</td>
+            <td th:text="${req.customer.username}">customer1</td>
+            <td th:text="${req.car != null ? req.car.carType + ' - ' + req.car.registrationNumber : 'N/A'}">Sedan - AB12XY3456</td>
+            <td th:text="${req.serviceType}">Oil Change</td>
+            <td th:text="${#temporals.format(req.requestDate, 'dd-MM-yyyy HH:mm')}">01-01-2025 10:00</td>
+            <td>
+                <form th:action="@{/admin/update-request}" method="post" class="d-flex gap-2 align-items-center">
+                    <input type="hidden" name="requestId" th:value="${req.id}"/>
+                    <button type="submit" name="status" value="Completed" class="btn btn-success btn-sm">Mark Completed</button>
+                    <input type="text" name="comment" placeholder="Add comment (optional)" class="form-control form-control-sm"/>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Completed services table, hidden by default -->
+    <table id="completedTable" class="table table-striped table-dark" style="display:none;">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Customer</th>
+            <th>Car</th>
+            <th>Service</th>
+            <th>Requested On</th>
+            <th>Completed On</th>
+            <th>Admin Comment</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="req : ${completedRequests}">
+            <td th:text="${req.id}">1</td>
+            <td th:text="${req.customer.username}">customer1</td>
+            <td th:text="${req.car != null ? req.car.carType + ' - ' + req.car.registrationNumber : 'N/A'}">Sedan - AB12XY3456</td>
+            <td th:text="${req.serviceType}">Oil Change</td>
+            <td th:text="${#temporals.format(req.requestDate, 'dd-MM-yyyy HH:mm')}">01-01-2025 10:00</td>
+            <td th:text="${req.completionDate != null ? #temporals.format(req.completionDate, 'dd-MM-yyyy HH:mm') : 'N/A'}">02-01-2025 12:00</td>
+            <td th:text="${req.adminComment}">Changed oil filter</td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+
+<footer class="bg-dark text-light text-center py-3 footer-fixed">
+    <div>© 2025 AutoCare Pro</div>
+    <div class="mt-2">
+        <a href="https://facebook.com" target="_blank" class="text-light me-3"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://twitter.com" target="_blank" class="text-light me-3"><i class="fab fa-twitter"></i></a>
+        <a href="https://instagram.com" target="_blank" class="text-light"><i class="fab fa-instagram"></i></a>
+    </div>
+</footer>
+
+
+<script>
+    function showTable(table) {
+        const pendingTable = document.getElementById("pendingTable");
+        const completedTable = document.getElementById("completedTable");
+        const btnPending = document.getElementById("btnPending");
+        const btnCompleted = document.getElementById("btnCompleted");
+
+        if (table === "pending") {
+            pendingTable.style.display = "";
+            completedTable.style.display = "none";
+            btnPending.classList.add("btn-primary");
+            btnPending.classList.remove("btn-secondary");
+            btnCompleted.classList.add("btn-secondary");
+            btnCompleted.classList.remove("btn-primary");
+        } else {
+            pendingTable.style.display = "none";
+            completedTable.style.display = "";
+            btnPending.classList.add("btn-secondary");
+            btnPending.classList.remove("btn-primary");
+            btnCompleted.classList.remove("btn-secondary");
+            btnCompleted.classList.add("btn-primary");
+        }
+    }
+
+    // Show pending by default
+    window.onload = function () {
+        showTable("pending");
+    };
+</script>
+
+</body>
+</html>

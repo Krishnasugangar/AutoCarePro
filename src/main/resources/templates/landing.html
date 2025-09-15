@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>AutoCare Pro - Professional Car Service</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: url('/images/background.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #ffffff;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 30px;
+            background-color: #222222; /* Dark solid background */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.7);
+        }
+        .site-name {
+            font-weight: bold;
+            font-size: 24px;
+            align-self: center;
+            color: #f4f4f4;
+        }
+        .nav-buttons {
+            align-self: center;
+        }
+        .nav-buttons a {
+            margin-left: 15px;
+            padding: 8px 15px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        .nav-buttons a:hover {
+            background-color: #2980b9;
+        }
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+            padding: 20px 40px; /* Added vertical 20px and horizontal 40px padding */
+            background-color: rgba(0, 0, 0, 0.5);
+            margin: 100px 250px 250px 250px;
+            border-radius: 12px;
+        }
+
+        main h1 {
+            font-size: 48px;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 5px #000;
+        }
+        main p {
+            font-size: 22px;
+            margin-bottom: 40px;
+            text-shadow: 1px 1px 4px #000;
+        }
+        footer {
+            background-color: #222222; /* Dark solid background */
+            color: #ccc;
+            text-align: center;
+            padding: 15px 30px;
+            font-size: 16px;
+            box-shadow: 0 -4px 6px rgba(0,0,0,0.7);
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="site-name">AUTOCARE PRO</div>
+    <div class="nav-buttons">
+        <a th:href="@{/login}">Login</a>
+        <a th:href="@{/register}">Register</a>
+    </div>
+</header>
+
+<main>
+    <h1>Professional Car Service</h1>
+    <p>Quality automotive care you can trust. Expert service competitive prices.</p>
+</main>
+
+<footer>
+    &copy; 2025 AutoCare Pro
+</footer>
+</body>
+</html>
