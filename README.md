@@ -1,1 +1,1 @@
-AutoCarePro proejct
+AutoCarePro project
